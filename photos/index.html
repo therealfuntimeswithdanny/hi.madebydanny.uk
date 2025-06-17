@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daniel Morrisey - Photos</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/0ca27f8db1.js" crossorigin="anonymous"></script>    
+    
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Apply the Inter font family */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f9fafb;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
+
+        /* Prevent images in columns from breaking */
+        .masonry-item {
+            break-inside: avoid;
+        }
+
+        /* Prevent background scroll when modal is open */
+        .modal-open {
+            overflow: hidden;
+        }
+
+        /* Styling for the modal image to prevent it from exceeding viewport */
+        #modalImage {
+            max-width: 90vw;
+            max-height: 80vh;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="flex flex-col h-screen">
+
+        <!-- Header/Navbar -->
+        <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200 w-full sticky top-0 z-20">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Left side: Name -->
+                    <div class="flex-shrink-0">
+                        <a href="https://danielmorrisey.com" class="text-xl font-bold text-gray-900">Daniel Morrisey</a>
+                    </div>
+
+                    <!-- Right side: Social Links -->
+                    <div class="flex items-center space-x-5 text-gray-500">
+                        <a href="https://bsky.app/profile/madebydanny.uk" class="hover:text-blue-500 transition-colors duration-300"><i class="fa-brands fa-bluesky"></i></a>
+                        <a href="https://threads.com/madebydanny.uk" class="hover:text-pink-500 transition-colors duration-300"><i class="fa-brands fa-threads"></i></a>
+                        <a href="https://mastodon.social/@danielmorrisey" class="hover:text-blue-700 transition-colors duration-300"><i class="fa-brands fa-mastodon"></i></a>
+                        <a href="mailto:danny@danielmorrisey.com" class="hover:text-gray-900 transition-colors duration-300"><i class="fa-solid fa-envelope"></i></a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <div class="flex flex-1 overflow-hidden">
+            
+            <!-- Sidebar -->
+            <aside class="w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto p-4">
+                <nav class="space-y-1">
+                    <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Library</h3>
+                    <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-100 text-gray-900">
+                        <svg class="h-6 w-6 mr-3 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+                        Photos
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Photo Grid -->
+            <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
+                <div class="mb-6">
+                    <h1 class="text-2xl font-bold text-gray-900">All Photos</h1>
+                    <p class="text-sm text-gray-500">United States</p>
+                </div>
+
+                <!-- Responsive Masonry Grid -->
+                <div id="photoGrid" class="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-7 2xl:columns-8 gap-4 space-y-4">
+                    <!-- Images will now stack nicely. Added cursor-pointer -->
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028339297.DSC_3793.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028474885.DSC_0140.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x600/fee2e2/b91c1c?text=Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreigdvi6hb2zb36ghfhtzmu4c7mgodxdejvxbajsnj4bulmwhib53jq@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028507963.DSC_2017.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiaxopmdtqzb7dzjzzkkup3jszhmw66b5f7wv57bwq47u3h4obvi6q@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x500/fee2e2/b91c1c?text=Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreig767khij2tdcilb2glsdm5rbrlqvx6dctmdauzv5gatiz7rbniwy@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028513724.DSC_2024.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028523510.DSC_0164.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028526757.DSC_3765.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiehkv7jezafhtmvhvbq5rk6ci35ob663bykhrlhfugiwfzwalevbm@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreihzb36cruwwro7xddrs5nyzl5yuzj54dnx2r3hep5lxfm5gldmwxe@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiaqqqwa2wrsq5iis2mxumy5mbvkuiwxtyssmtj6kyzjtrttfae4qm@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
+                </div>
+                <footer class="text-center mt-8 py-4">
+                    <p class="text-sm text-gray-600">9 Photos, 0 Videos</p>
+                </footer>
+            </main>
+        </div>
+    </div>
+
+    <!-- Image Preview Modal -->
+    <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4">
+        <!-- Close Button (Top Right) -->
+        <button id="closeModal" class="absolute top-4 right-5 text-white text-4xl font-bold hover:text-gray-300 transition-colors">&times;</button>
+        
+        <!-- Previous Button -->
+        <button id="prevButton" class="absolute left-4 md:left-10 text-white text-4xl font-bold hover:text-gray-300 transition-colors">&#8249;</button>
+        
+        <!-- Image Container -->
+        <div class="relative">
+            <img id="modalImage" src="" alt="Image Preview" class="rounded-lg shadow-2xl object-contain">
+        </div>
+        
+        <!-- Next Button -->
+        <button id="nextButton" class="absolute right-4 md:right-10 text-white text-4xl font-bold hover:text-gray-300 transition-colors">&#8250;</button>
+    </div>
+
+    <script>
+        // Wait for the DOM to be fully loaded before running the script
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get all necessary elements from the DOM
+            const photoGrid = document.getElementById('photoGrid');
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+            const closeModal = document.getElementById('closeModal');
+            const prevButton = document.getElementById('prevButton');
+            const nextButton = document.getElementById('nextButton');
+
+            // Find all images within the photo grid
+            const images = Array.from(photoGrid.querySelectorAll('img'));
+            let currentImageIndex = 0;
+
+            // Function to open the modal and display the selected image
+            const openImageModal = (index) => {
+                if (index >= 0 && index < images.length) {
+                    currentImageIndex = index;
+                    modalImage.src = images[currentImageIndex].src;
+                    imageModal.classList.remove('hidden');
+                    document.body.classList.add('modal-open'); // Prevent background scrolling
+                }
+            };
+
+            // Function to close the modal
+            const closeImageModal = () => {
+                imageModal.classList.add('hidden');
+                document.body.classList.remove('modal-open');
+            };
+
+            // Function to show the next image
+            const showNextImage = () => {
+                const nextIndex = (currentImageIndex + 1) % images.length;
+                openImageModal(nextIndex);
+            };
+
+            // Function to show the previous image
+            const showPrevImage = () => {
+                const prevIndex = (currentImageIndex - 1 + images.length) % images.length;
+                openImageModal(prevIndex);
+            };
+
+            // Add click event listeners to each image in the grid
+            images.forEach((img, index) => {
+                img.addEventListener('click', () => {
+                    openImageModal(index);
+                });
+            });
+
+            // Event listener for the close button
+            closeModal.addEventListener('click', closeImageModal);
+
+            // Event listener for the modal background (to close on click outside image)
+            imageModal.addEventListener('click', (e) => {
+                if (e.target === imageModal) {
+                    closeImageModal();
+                }
+            });
+
+            // Event listener for the next button
+            nextButton.addEventListener('click', showNextImage);
+
+            // Event listener for the previous button
+            prevButton.addEventListener('click', showPrevImage);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!imageModal.classList.contains('hidden')) { // only if modal is open
+                    if (e.key === 'Escape') {
+                        closeImageModal();
+                    }
+                    if (e.key === 'ArrowRight') {
+                        showNextImage();
+                    }
+                    if (e.key === 'ArrowLeft') {
+                        showPrevImage();
+                    }
+                }
+            });
+        });
+    </script>
+    
+</body>
+</html>
