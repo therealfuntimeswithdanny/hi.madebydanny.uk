@@ -44,6 +44,16 @@
             max-width: 90vw;
             max-height: 80vh;
         }
+
+        /* Animation for sidebar toggle */
+        .sidebar-transition {
+            transition: transform 0.3s ease-out;
+        }
+
+        /* Smooth scroll behavior for "Back to Top" */
+        html {
+            scroll-behavior: smooth;
+        }
     </style>
 </head>
 <body class="text-gray-800">
@@ -54,17 +64,23 @@
         <header class="bg-white/80 backdrop-blur-sm border-b border-gray-200 w-full sticky top-0 z-20">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
-                    <!-- Left side: Name -->
-                    <div class="flex-shrink-0">
+                    <!-- Left side: Name and Mobile Menu Button -->
+                    <div class="flex items-center">
+                        <!-- Mobile menu button: Visible only on small screens (hidden on 'lg' and up) -->
+                        <button id="menuButton" class="lg:hidden p-2 rounded-md text-gray-500 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500 mr-3" aria-label="Open Navigation Menu">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </button>
                         <a href="https://danielmorrisey.com" class="text-xl font-bold text-gray-900">Daniel Morrisey</a>
                     </div>
 
                     <!-- Right side: Social Links -->
                     <div class="flex items-center space-x-5 text-gray-500">
-                        <a href="https://bsky.app/profile/madebydanny.uk" class="hover:text-blue-500 transition-colors duration-300"><i class="fa-brands fa-bluesky"></i></a>
-                        <a href="https://threads.com/madebydanny.uk" class="hover:text-pink-500 transition-colors duration-300"><i class="fa-brands fa-threads"></i></a>
-                        <a href="https://mastodon.social/@danielmorrisey" class="hover:text-blue-700 transition-colors duration-300"><i class="fa-brands fa-mastodon"></i></a>
-                        <a href="mailto:danny@danielmorrisey.com" class="hover:text-gray-900 transition-colors duration-300"><i class="fa-solid fa-envelope"></i></a>
+                        <a href="https://bsky.app/profile/madebydanny.uk" class="hover:text-blue-500 transition-colors duration-300" aria-label="Bluesky Profile"><i class="fa-brands fa-bluesky"></i></a>
+                        <a href="https://threads.com/madebydanny.uk" class="hover:text-pink-500 transition-colors duration-300" aria-label="Threads Profile"><i class="fa-brands fa-threads"></i></a>
+                        <a href="https://mastodon.social/@danielmorrisey" class="hover:text-blue-700 transition-colors duration-300" aria-label="Mastodon Profile"><i class="fa-brands fa-mastodon"></i></a>
+                        <a href="mailto:danny@danielmorrisey.com" class="hover:text-gray-900 transition-colors duration-300" aria-label="Email Me"><i class="fa-solid fa-envelope"></i></a>
                     </div>
                 </div>
             </div>
@@ -74,15 +90,20 @@
         <div class="flex flex-1 overflow-hidden">
             
             <!-- Sidebar -->
-            <aside class="w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto p-4">
+            <!-- On large screens (lg:), it's relative and visible (translate-x-0).
+                 On small screens, it's absolute, off-screen by default (-translate-x-full), and toggled by JS. -->
+            <aside id="sidebar" class="w-64 flex-shrink-0 bg-white border-r border-gray-200 overflow-y-auto p-4 lg:relative absolute h-full z-10 sidebar-transition -translate-x-full lg:translate-x-0">
                 <nav class="space-y-1">
-                    <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider">Library</h3>
-                    <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md bg-gray-100 text-gray-900">
+                    <h3 class="px-3 text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Library</h3>
+                    <a href="#" class="flex items-center px-3 py-2 text-sm font-medium rounded-md text-gray-700 hover:bg-gray-100 transition-colors">
                         <svg class="h-6 w-6 mr-3 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                        Photos
+                        All Photos
                     </a>
                 </nav>
             </aside>
+
+            <!-- Overlay for mobile sidebar: Visible only when sidebar is open on small screens (hidden on 'lg' and up) -->
+            <div id="sidebarOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-0 hidden lg:hidden"></div>
 
             <!-- Photo Grid -->
             <main class="flex-1 p-6 lg:p-8 overflow-y-auto">
@@ -91,21 +112,34 @@
                     <p class="text-sm text-gray-500">United States</p>
                 </div>
 
+                <!-- Search Bar -->
+                <div class="mb-6">
+                    <label for="search-photos" class="sr-only">Search photos</label>
+                    <div class="relative rounded-md shadow-sm">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                        </div>
+                        <input type="text" name="search-photos" id="search-photos" class="focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 pr-3 py-2 border-gray-300 rounded-md" placeholder="Search photos...">
+                    </div>
+                </div>
+
                 <!-- Responsive Masonry Grid -->
                 <div id="photoGrid" class="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-7 2xl:columns-8 gap-4 space-y-4">
                     <!-- Images will now stack nicely. Added cursor-pointer -->
-                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028339297.DSC_3793.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028474885.DSC_0140.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x600/fee2e2/b91c1c?text=Error';">
-                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreigdvi6hb2zb36ghfhtzmu4c7mgodxdejvxbajsnj4bulmwhib53jq@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028507963.DSC_2017.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiaxopmdtqzb7dzjzzkkup3jszhmw66b5f7wv57bwq47u3h4obvi6q@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x500/fee2e2/b91c1c?text=Error';">
-                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreig767khij2tdcilb2glsdm5rbrlqvx6dctmdauzv5gatiz7rbniwy@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028513724.DSC_2024.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028523510.DSC_0164.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028526757.DSC_3765.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiehkv7jezafhtmvhvbq5rk6ci35ob663bykhrlhfugiwfzwalevbm@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreihzb36cruwwro7xddrs5nyzl5yuzj54dnx2r3hep5lxfm5gldmwxe@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
-                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiaqqqwa2wrsq5iis2mxumy5mbvkuiwxtyssmtj6kyzjtrttfae4qm@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 cursor-pointer" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028339297.DSC_3793.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028474885.DSC_0140.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/400x600/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreigdvi6hb2zb36ghfhtzmu4c7mgodxdejvxbajsnj4bulmwhib53jq@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028507963.DSC_2017.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiaxopmdtqzb7dzjzzkkup3jszhmw66b5f7wv57bwq47u3h4obvi6q@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/400x500/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreig767khij2tdcilb2glsdm5rbrlqvx6dctmdauzv5gatiz7rbniwy@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028513724.DSC_2024.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028523510.DSC_0164.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://buffer-start-page-uploads.s3.amazonaws.com/67ab723e3057553a76c8c018/1746028526757.DSC_3765.jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/600x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiehkv7jezafhtmvhvbq5rk6ci35ob663bykhrlhfugiwfzwalevbm@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://cdn.bsky.app/img/feed_thumbnail/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreihzb36cruwwro7xddrs5nyzl5yuzj54dnx2r3hep5lxfm5gldmwxe@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Image+Error';">
+                    <img src="https://cdn.bsky.app/img/feed_fullsize/plain/did:plc:tnnl6qjjj4lquabzmsuu34ip/bafkreiaqqqwa2wrsq5iis2mxumy5mbvkuiwxtyssmtj6kyzjtrttfae4qm@jpeg" class="masonry-item w-full block rounded-lg shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer" alt="Gallery Image" onerror="this.onerror=null;this.src='https://placehold.co/400x400/fee2e2/b91c1c?text=Image+Error';">
                 </div>
                 <footer class="text-center mt-8 py-4">
                     <p class="text-sm text-gray-600">9 Photos, 0 Videos</p>
@@ -117,10 +151,10 @@
     <!-- Image Preview Modal -->
     <div id="imageModal" class="hidden fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4">
         <!-- Close Button (Top Right) -->
-        <button id="closeModal" class="absolute top-4 right-5 text-white text-4xl font-bold hover:text-gray-300 transition-colors">&times;</button>
+        <button id="closeModal" class="absolute top-4 right-5 text-white text-4xl font-bold hover:text-gray-300 transition-colors" aria-label="Close Image Modal">&times;</button>
         
         <!-- Previous Button -->
-        <button id="prevButton" class="absolute left-4 md:left-10 text-white text-4xl font-bold hover:text-gray-300 transition-colors">&#8249;</button>
+        <button id="prevButton" class="absolute left-4 md:left-10 text-white text-4xl font-bold hover:text-gray-300 transition-colors" aria-label="Previous Image">&#8249;</button>
         
         <!-- Image Container -->
         <div class="relative">
@@ -128,8 +162,15 @@
         </div>
         
         <!-- Next Button -->
-        <button id="nextButton" class="absolute right-4 md:right-10 text-white text-4xl font-bold hover:text-gray-300 transition-colors">&#8250;</button>
+        <button id="nextButton" class="absolute right-4 md:right-10 text-white text-4xl font-bold hover:text-gray-300 transition-colors" aria-label="Next Image">&#8250;</button>
     </div>
+
+    <!-- Back to Top Button -->
+    <button id="backToTopBtn" class="hidden fixed bottom-6 right-6 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50" aria-label="Back to Top">
+        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </button>
 
     <script>
         // Wait for the DOM to be fully loaded before running the script
@@ -141,6 +182,10 @@
             const closeModal = document.getElementById('closeModal');
             const prevButton = document.getElementById('prevButton');
             const nextButton = document.getElementById('nextButton');
+            const menuButton = document.getElementById('menuButton');
+            const sidebar = document.getElementById('sidebar');
+            const sidebarOverlay = document.getElementById('sidebarOverlay');
+            const backToTopBtn = document.getElementById('backToTopBtn');
 
             // Find all images within the photo grid
             const images = Array.from(photoGrid.querySelectorAll('img'));
@@ -174,6 +219,20 @@
                 openImageModal(prevIndex);
             };
 
+            // Function to open the sidebar for mobile
+            const openSidebar = () => {
+                sidebar.classList.remove('-translate-x-full'); // Slides sidebar into view
+                sidebar.classList.add('translate-x-0');
+                sidebarOverlay.classList.remove('hidden'); // Shows overlay
+            };
+
+            // Function to close the sidebar for mobile
+            const closeSidebar = () => {
+                sidebar.classList.remove('translate-x-0');
+                sidebar.classList.add('-translate-x-full'); // Slides sidebar out of view
+                sidebarOverlay.classList.add('hidden'); // Hides overlay
+            };
+
             // Add click event listeners to each image in the grid
             images.forEach((img, index) => {
                 img.addEventListener('click', () => {
@@ -181,7 +240,7 @@
                 });
             });
 
-            // Event listener for the close button
+            // Event listener for the close button on the image modal
             closeModal.addEventListener('click', closeImageModal);
 
             // Event listener for the modal background (to close on click outside image)
@@ -191,13 +250,18 @@
                 }
             });
 
-            // Event listener for the next button
+            // Event listener for the next button in the image modal
             nextButton.addEventListener('click', showNextImage);
 
-            // Event listener for the previous button
+            // Event listener for the previous button in the image modal
             prevButton.addEventListener('click', showPrevImage);
 
-            // Keyboard navigation
+            // Event listeners for sidebar toggle on mobile
+            menuButton.addEventListener('click', openSidebar);
+            sidebarOverlay.addEventListener('click', closeSidebar); // Close sidebar when clicking overlay
+
+
+            // Keyboard navigation for image modal (Escape, ArrowRight, ArrowLeft)
             document.addEventListener('keydown', (e) => {
                 if (!imageModal.classList.contains('hidden')) { // only if modal is open
                     if (e.key === 'Escape') {
@@ -210,6 +274,29 @@
                         showPrevImage();
                     }
                 }
+            });
+
+            // Close sidebar if window is resized to a larger screen while it's open on mobile
+            window.addEventListener('resize', () => {
+                if (window.innerWidth >= 1024) { // 'lg' breakpoint in Tailwind CSS
+                    closeSidebar(); // Ensure sidebar closes and hides the overlay when resizing to desktop
+                }
+            });
+
+            // "Back to Top" button logic
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 300) { // Show button after scrolling down 300px
+                    backToTopBtn.classList.remove('hidden');
+                } else {
+                    backToTopBtn.classList.add('hidden');
+                }
+            });
+
+            backToTopBtn.addEventListener('click', () => {
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth' // Smooth scroll to the top
+                });
             });
         });
     </script>
